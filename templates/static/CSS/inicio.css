@@ -49,10 +49,12 @@ body {
 }
 
 .login h2 {
-	margin-top: 20px;
-	font-weight: bold;
-	font-size: 40px;
-	letter-spacing: 5px;
+
+        font-family: 'Kaushan Script', cursive;
+        font-size: 3.5rem;
+        font-weight: bold;
+        color: #067e78;
+        font-style: italic
 }
 
 .login form {
