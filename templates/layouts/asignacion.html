@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../static/css/login.css">
+    <link rel="stylesheet" href="../static/CSS/inicio.css">
+    <link rel="stylesheet" href="../static/CSS/style2.css">  
     <link rel="stylesheet" href="../static/css/asignacion.css">
       <!--Enlace a css de Boostrap-->
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
@@ -23,8 +24,52 @@
     crossorigin="anonymous"></script>
 </head>
 <body>
+  <div class="wrapper d-flex align-items-stretch">
+
+    <nav id="sidebar">
+      <br><br>
+      <div class="p-4 pt-5">
+        <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(../static/imagenes/ing.jpg);"></a>
+        <br>
+        <ul class="list-unstyled components mb-5">
+          <li >
+            <a href="/registrousuario.html">Registro Usuarios</a>
+          </li>
+          <li class="active">
+            <a href="/registroestudiante.html">Registro Estudiante</a>
+          </li>
+          <li>
+            <a href="/asignacion.html">Asignaciones</a>
+          </li>
+
+          </li>
+          <li>
+            <a href="/desactivarusuario.html">Desactivar Usuario</a>
+          </li>
+          <li>
+            <a href="#">Contact</a>
+          </li>
+        </ul>
+        <br>
+        <div class="footer">
+          <p>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;
+            <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with
+            <i class="icon-heart" aria-hidden="true"></i> by <a href="#"></a>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          </p>
+        </div>
+
+      </div>
+    </nav>
+    <!-- End Backgrounds -->
+
+    <div class="container" id="login1">
+      <div class="row justify-content-center">
+        <div class="col-lg-5">
+          <div class="login">
     <center>
-      <br>
       
              <!--Alerta en caso de errores-->
     {% with messages = get_flashed_messages() %}
@@ -38,16 +83,13 @@
     {% endwith %}
          <!--Sección de registro-->
      <!--Uso de cards en conjunto con nav y form para que el usuario envíe sus sugerencias-->
-    <div class="col-sm-4">
-        <div class="card border border-info ">
-          <div class="card-body text-light bg-success">
-            <h5 class="card-title  text-dark">Registro</h5>
-            <form method="post" action="{{url_for('registroAsignacion')}}" >
-              
+
+            <h1>Registro</h1>
+            <br>
+            <form method="post" action="{{url_for('registroAsignacion')}}" >      
               <table class="table ">
                 <tr>
                   <td>
-
               <label for="menuDocentes">Docente</label>
                </td>
                <td>
@@ -60,8 +102,6 @@
               </select>
             </td>
             </tr>
-              <br>
-             <br>
              <tr>
 
             <td>
@@ -72,14 +112,11 @@
                 <option selected>Opciones</option>
                 {% for materia in coleccionMateria %}
                 <option  name="materia" value="{{ materia.name}}">{{ materia.name}}</option>
-                {% endfor %}
-            
+                {% endfor %}      
               </select>
             </td>
             </tr>
-
             <tr>
-
               <td>
                <label for="menuAulas">Aulas</label>
              </td>
@@ -93,11 +130,7 @@
                </select>
              </td>
              </tr>
-
-
-            
              <tr>
-
              <td>
               <label for="menuParalelos">Paralelos</label>
             </td>
@@ -111,8 +144,6 @@
               </select>
             </td>
             </tr>
-              <br>
-             <br>
              <tr>
               <td>
               <label for="menuHorarioInicio">Horario Inicio</label>
@@ -127,8 +158,6 @@
               </select>
             </td>
             </tr>
-             <br>
-             <br>
              <tr>
               <td>
 
@@ -146,15 +175,11 @@
             </tr>
           </table>
               <br>
-              <br>
-
-                
-                
                 
                  <!--Botón utilizado para ingresar al sitio web-->
                 <button type="submit" class="btn btn-primary bg-dark border border-info "  >Registro</button>
                 <br>
-                <br>
+
       
               </form>
             
