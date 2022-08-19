@@ -39,6 +39,11 @@ body {
 	text-transform: uppercase;
 }
 
+#login1{
+	padding-top: 2%;
+	text-align: center;
+	text-transform: uppercase;
+}
 
 .login {
 	width: 100%;
