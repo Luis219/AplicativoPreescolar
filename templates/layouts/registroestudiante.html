@@ -7,7 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registro Estudiante</title>
   <link rel="stylesheet" href="../static/CSS/inicio.css">
-  <link rel="stylesheet" href="../static/CSS/style2.css">  <!--Enlace a css de Boostrap-->
+  <link rel="stylesheet" href="../static/CSS/style2.css">
+  <!--Enlace a css de Boostrap-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
@@ -32,7 +33,7 @@
         <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(../static/imagenes/ing.jpg);"></a>
         <br>
         <ul class="list-unstyled components mb-5">
-          <li >
+          <li>
             <a href="/registrousuario.html">Registro Usuarios</a>
           </li>
           <li class="active">
@@ -47,20 +48,12 @@
             <a href="/desactivarusuario.html">Desactivar Usuario</a>
           </li>
           <li>
-            <a href="#">Contact</a>
+            <a href="#">Usuarios registrados</a>
           </li>
         </ul>
         <br>
         <br>
-        <div class="footer">
-          <p>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            Copyright &copy;
-            <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with
-            <i class="icon-heart" aria-hidden="true"></i> by <a href="#"></a>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-          </p>
-        </div>
+
 
       </div>
     </nav>
@@ -68,71 +61,73 @@
 
     <div class="container" id="login1">
       <div class="row justify-content-center">
-        <div class="col-lg-5">
-          <div class="login">
-              <center>
-                <br>
+        <div class="login1">
+          <center>
+            <br>
 
-                <!--Alerta en caso de errores-->
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                <ul class="alert alert-warning" role="alert">
-                  {% for message in messages %}
-                  <li>{{ message }}</li>
+            <!--Alerta en caso de errores-->
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class="alert alert-warning" role="alert">
+              {% for message in messages %}
+              <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+            <!--Sección de registro-->
+            <!--Uso de cards en conjunto con nav y form para que el usuario envíe sus sugerencias-->
+
+            <h1>Registro Estudiante</h1>
+
+            <form method="post" action="{{url_for('registroEstudiante')}}" enctype="multipart/form-data">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+
+                  <label for="inputImagen">Cargar Imagen</label>
+                  <input type="file" class="form-control " id="inputImagen" autocomplete="off" required
+                    onchange="loadFile(event)" name="imagen" placeholder="">
+                  <br>
+                </div>
+                <!--<img id="output" width="50" />-->
+                <div class="form-group col-md-6">
+                  <label for="inputCedula">Cedula</label>
+                  <input type="text" class="form-control" id="inputCedula" name="cedula" placeholder="">
+                </div>
+
+                <div class="form-group col-md-6">
+                  <label for="inputName">Nombre</label>
+                  <input type="text" class="form-control" id="inputName" name="nombre" placeholder="">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputApelido">Apellido</label>
+                  <input type="text" class="form-control" id="inputApelido" name="apellido" placeholder="">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputApelido">Teléfono</label>
+                  <input type="text" class="form-control" id="inputTelefono" name="telefono" placeholder="">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputEdad">Edad</label>
+                  <input type="number" class="form-control" id="inputEdad" name="edad" placeholder="">
+                </div>
+
+                <select id="menuRoles" name="menuRoles" class=" form-group col-md-6 custom-select">
+                  <option selected> Roles </option>
+                  {% for rol in coleccionRoles %}
+                  <option name="rol" value="{{ rol.name }}">{{ rol.name}}</option>
                   {% endfor %}
-                </ul>
-                {% endif %}
-                {% endwith %}
-                <!--Sección de registro-->
-                <!--Uso de cards en conjunto con nav y form para que el usuario envíe sus sugerencias-->
 
-                      <h1>Registro Estudiante</h1>
-                      <form method="post" action="{{url_for('registroEstudiante')}}" enctype="multipart/form-data">
+                </select>
 
-                        <div class="form-group">
-                          <label for="inputImagen">Cargar Imagen</label>
-                          <input type="file" class="form-control" id="inputImagen" autocomplete="off" required
-                            onchange="loadFile(event)" name="imagen" placeholder="">
-                        </div>
-                        <img id="output" width="50" />
-                        <div class="form-group">
-                          <label for="inputCedula">Cedula</label>
-                          <input type="text" class="form-control" id="inputCedula" name="cedula" placeholder="">
-                        </div>
-                        <div class="form-group">
-                          <label for="inputName">Nombre</label>
-                          <input type="text" class="form-control" id="inputName" name="nombre" placeholder="">
-                        </div>
-                        <div class="form-group">
-                          <label for="inputApelido">Apellido</label>
-                          <input type="text" class="form-control" id="inputApelido" name="apellido" placeholder="">
-                        </div>
-                        <div class="form-group">
-                          <label for="inputApelido">Teléfono</label>
-                          <input type="text" class="form-control" id="inputTelefono" name="telefono" placeholder="">
-                        </div>
-                        <div class="form-group">
-                          <label for="inputEdad">Edad</label>
-                          <input type="number" class="form-control" id="inputEdad" name="edad" placeholder="">
-                        </div>
-                        <select id="menuRoles" name="menuRoles" class="form-select form-select-sm"
-                          aria-label=".form-select-sm example">
-                          <option selected> Roles </option>
-                          {% for rol in coleccionRoles %}
-                          <option name="rol" value="{{ rol.name }}">{{ rol.name}}</option>
-                          {% endfor %}
+                <select id="menuMateria" name="menuMateria" class=" form-group col-md-6 custom-select">
+                  <option selected> Materia </option>
+                  {% for materia in coleccionMateria %}
+                  <option name="materia" value="{{ materia.name }}">{{ materia.name}}</option>
+                  {% endfor %}
 
-                        </select>
-
-                        <select id="menuMateria" name="menuMateria" class="form-select form-select-sm"
-                          aria-label=".form-select-sm example">
-                          <option selected> Materia </option>
-                          {% for materia in coleccionMateria %}
-                          <option name="materia" value="{{ materia.name }}">{{ materia.name}}</option>
-                          {% endfor %}
-
-                        </select>
-                        <!--permisos
+                </select>
+                <!--permisos
               <div class="form-group">
                
                 {% for permiso in coleccionPermisos %}
@@ -143,30 +138,30 @@
               -->
 
 
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Correo electrónico</label>
-                          <input type="email" class="form-control" id="exampleInputEmail1" name="correo"
-                            aria-describedby="emailHelp" placeholder="Ingrese su dirección de correo electrónico">
-                          <small id="emailHelp" class="form-text text-muted">Ingrese su dirección de correo electrónico
-                          </small>
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputPassword1">Contraseña</label>
-                          <input type="password" class="form-control" id="exampleInputPassword1" name="contrasenia"
-                            placeholder="Contraseña">
-                        </div>
-
-                        <!--Botón utilizado para ingresar al sitio web-->
-                        <button type="submit" class="btn btn-primary bg-dark border border-info ">Registro</button>
-                        <br>
-                        <br>
-
-                      </form>
-                    </div>
-                  </div>
+                <div class="form-group col-md-6">
+                  <label for="exampleInputEmail1">Correo electrónico</label>
+                  <input type="email" class="form-control" id="exampleInputEmail1" name="correo"
+                    aria-describedby="emailHelp" placeholder="Ingrese su dirección de correo electrónico">
+                  <!-- <small id="emailHelp" class="form-text text-muted">Ingrese su dirección de correo electrónico
+                          </small>-->
                 </div>
-          </div>
+                <div class="form-group col-md-6">
+                  <label for="exampleInputPassword1">Contraseña</label>
+                  <input type="password" class="form-control" id="exampleInputPassword1" name="contrasenia"
+                    placeholder="Contraseña">
+                </div>
+
+                <!--Botón utilizado para ingresar al sitio web-->
+                <button type="submit" class="btn btn-primary bg-dark border border-info ">Registro</button>
+                <br>
+                <br>
+
+            </form>
         </div>
+      </div>
+    </div>
+  </div>
+  </div>
 
   </center>
 

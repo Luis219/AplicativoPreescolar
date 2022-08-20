@@ -8224,8 +8224,8 @@ h1, h2, h3, h4, h5,
     margin-left: -300px; }
   #sidebar .logo {
     display: block;
-    width: 120px;
-    height: 120px;
+    width: 180px;
+    height: 180px;
     margin: 0 auto; }
     #sidebar .logo span {
       display: block; }
@@ -8280,6 +8280,7 @@ a[data-toggle="collapse"] {
 .btn.btn-primary {
   background: #f8b739;
   border-color: #f8b739; }
+
   .btn.btn-primary:hover, .btn.btn-primary:focus {
     background: #f8b739 !important;
     border-color: #f8b739 !important; }
