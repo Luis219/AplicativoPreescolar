@@ -31,14 +31,17 @@
       <br><br>
       <div class="p-4 pt-5">
         <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(../static/imagenes/ing.jpg);"></a>
-        <br>
         <ul class="list-unstyled components mb-5">
+          <li class="active">
+            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Registros</a>
+            <ul class="collapse list-unstyled" id="homeSubmenu">
           <li>
             <a href="/registrousuario.html">Registro Usuarios</a>
           </li>
           <li class="active">
             <a href="/registroestudiante.html">Registro Estudiante</a>
           </li>
+        </ul>
           <li>
             <a href="/asignacion.html">Asignaciones</a>
           </li>
@@ -111,22 +114,24 @@
                   <label for="inputEdad">Edad</label>
                   <input type="number" class="form-control" id="inputEdad" name="edad" placeholder="">
                 </div>
-
-                <select id="menuRoles" name="menuRoles" class=" form-group col-md-6 custom-select">
+                <div class="form-group col-md-6">
+                <select id="menuRoles" name="menuRoles" class="custom-select">
                   <option selected> Roles </option>
                   {% for rol in coleccionRoles %}
                   <option name="rol" value="{{ rol.name }}">{{ rol.name}}</option>
                   {% endfor %}
-
+                
                 </select>
+              </div>
+              <div class="form-group col-md-6">
 
-                <select id="menuMateria" name="menuMateria" class=" form-group col-md-6 custom-select">
+                <select id="menuMateria" name="menuMateria" class="custom-select">
                   <option selected> Materia </option>
                   {% for materia in coleccionMateria %}
                   <option name="materia" value="{{ materia.name }}">{{ materia.name}}</option>
                   {% endfor %}
-
                 </select>
+              </div>
                 <!--permisos
               <div class="form-group">
                
@@ -152,10 +157,12 @@
                 </div>
 
                 <!--Botón utilizado para ingresar al sitio web-->
-                <button type="submit" class="btn btn-primary bg-dark border border-info ">Registro</button>
-                <br>
-                <br>
+                <div class="form-group col-md-6">
 
+                <button type="submit" class="btn btn-success bg-success btn-block btn-signin">Registro</button>
+                <br>
+                <br>
+                </div>
             </form>
         </div>
       </div>

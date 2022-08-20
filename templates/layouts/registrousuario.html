@@ -32,14 +32,17 @@
       <br><br>
       <div class="p-4 pt-5">
         <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(../static/imagenes/ing.jpg);"></a>
-        <br>
         <ul class="list-unstyled components mb-5">
+          <li class="active">
+            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Registros</a>
+            <ul class="collapse list-unstyled" id="homeSubmenu">
           <li class="active">
             <a href="/registrousuario.html">Registro Usuarios</a>
           </li>
           <li >
             <a href="/registroestudiante.html">Registro Estudiante</a>
           </li>
+        </ul>
           <li>
             <a href="/asignacion.html">Asignaciones</a>
           </li>
@@ -70,8 +73,7 @@
 
     <div class="container" id="login1">
       <div class="row justify-content-center">
-        <div class="col-lg-5">
-          <div class="login">
+          <div class="login1">
             <center>
 
               <!--Alerta en caso de errores-->
@@ -88,27 +90,31 @@
               <!--Uso de cards en conjunto con nav y form para que el usuario envíe sus sugerencias-->
               <h1>Registro</h1>
               <form method="post" action="{{url_for('registroUsuario')}}">
-                <div class="form-group">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
                   <label for="inputName">Nombre</label>
                   <input type="text" class="form-control" id="inputName" name="nombre" placeholder="">
                 </div>
-                <div class="form-group">
+                <div class="form-group col-md-6">
                   <label for="inputApelido">Apellido</label>
                   <input type="text" class="form-control" id="inputApelido" name="apellido" placeholder="">
                 </div>
-                <div class="form-group">
+                <div class="form-group col-md-6">
                   <label for="inputApelido">Teléfono</label>
                   <input type="text" class="form-control" id="inputTelefono" name="telefono" placeholder="">
                 </div>
-
-                <select id="menuRoles" name="menuRoles" class="form-select form-select-sm"
+                <div class="form-group col-md-6">
+                <label for="inputApelido">Selecciona un rol</label>
+                <select id="menuRoles" name="menuRoles" class="form-select custom-select"
                   aria-label=".form-select-sm example">
+                  <label for="inputApelido">Selecciona un rol</label>
                   <option selected>Rol</option>
                   {% for rol in coleccionRoles %}
                   <option name="rol" value="{{ rol.name }}">{{ rol.name}}</option>
                   {% endfor %}
 
                 </select>
+                </div>
                 <!--permisos
               <div class="form-group">
                
@@ -120,27 +126,31 @@
               -->
 
 
-                <div class="form-group">
+                <div class="form-group col-md-6">
                   <label for="exampleInputEmail1">Correo electrónico</label>
                   <input type="email" class="form-control" id="exampleInputEmail1" name="correo"
                     aria-describedby="emailHelp" placeholder="Ingrese su dirección de correo electrónico">
                   <!-- <small id="emailHelp" class="form-text text-muted">Ingrese su dirección de correo electrónico </small>-->
                 </div>
-                <div class="form-group">
+                <div class="form-group col-md-6">
                   <label for="exampleInputPassword1">Contraseña</label>
                   <input type="password" class="form-control" id="exampleInputPassword1" name="contrasenia"
                     placeholder="Contraseña">
                 </div>
 
                 <!--Botón utilizado para registrar -->
-                <button type="submit" class="btn btn-primary bg-dark border border-info ">Registro</button>
+                <br>
+                <div class="form-group col-md-6">
 
+                <button type="submit" class="btn btn-block btn-success bg-success  "><a class="btn btn-success btn-block btn-signin text-white"> Registro</a></button>
+                </div>
 
               </form>
-
-              <button type="submit" class="btn btn-lg btn-block btn-danger"><a class="btn btn-danger btn-block btn-signin text-white" href="/desactivarusuario.html"
+              <br>
+              <div class="form-group col-md-6">
+              <button type="submit" class="btn  btn-block btn-danger"><a class="btn btn-danger btn-block btn-signin text-white" href="/desactivarusuario.html"
                   role="button">Desactivar usuario</a></button>
-
+              </div>
           </div>
         </div>
       </div>
