@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../static/CSS/inicio.css">
-    <link rel="stylesheet" href="../static/CSS/style2.css">  
-    <link rel="stylesheet" href="../static/css/asignacion.css">
-      <!--Enlace a css de Boostrap-->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-     
-    <!-- Enlace a jQuery, opper.js,y Bootstrap JS para proveer de funcionalidad a elementos como carousel -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../static/CSS/inicio.css">
+  <link rel="stylesheet" href="../static/CSS/style2.css">
+  <link rel="stylesheet" href="../static/css/asignacion.css">
+  <!--Enlace a css de Boostrap-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <!-- Enlace a jQuery, opper.js,y Bootstrap JS para proveer de funcionalidad a elementos como carousel -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
@@ -23,6 +24,7 @@
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
 </head>
+
 <body>
   <div class="wrapper d-flex align-items-stretch">
 
@@ -31,19 +33,20 @@
       <div class="p-4 pt-5">
         <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(../static/imagenes/ing.jpg);"></a>
         <ul class="list-unstyled components mb-5">
-          <li class="active">
+          <li>
             <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Registros</a>
             <ul class="collapse list-unstyled" id="homeSubmenu">
-          <li >
-            <a href="/registrousuario.html">Registro Usuarios</a>
-          </li>
-          <li >
-            <a href="/registroestudiante.html">Registro Estudiante</a>
-          </li>
+              <li>
+                <a href="/registrousuario.html">Registro Usuarios</a>
+              </li>
+              <li>
+                <a href="/registroestudiante.html">Registro Estudiante</a>
+              </li>
+            </ul>
+
           <li class="active">
             <a href="/asignacion.html">Asignaciones</a>
           </li>
-            </ul>
           </li>
           <li>
             <a href="/desactivarusuario.html">Desactivar Usuario</a>
@@ -54,8 +57,8 @@
         </ul>
 
         <div class="footer">
-<br>
-<br>
+          <br>
+          <br>
         </div>
 
       </div>
@@ -64,128 +67,117 @@
 
     <div class="container" id="login1">
       <div class="row justify-content-center">
-        <div class="col-lg-5">
-          <div class="login">
-    <center>
-      
-             <!--Alerta en caso de errores-->
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class="alert alert-warning" role="alert">
-      {% for message in messages %}
-      <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-         <!--Sección de registro-->
-     <!--Uso de cards en conjunto con nav y form para que el usuario envíe sus sugerencias-->
+        <div class="login1">
+          <center>
+
+            <!--Alerta en caso de errores-->
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class="alert alert-warning" role="alert">
+              {% for message in messages %}
+              <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+            <!--Sección de registro-->
+            <!--Uso de cards en conjunto con nav y form para que el usuario envíe sus sugerencias-->
 
             <h1>Registro</h1>
             <br>
-            <form method="post" action="{{url_for('registroAsignacion')}}" >      
-              <table class="table ">
-                <tr>
-                  <td>
-              <label for="menuDocentes">Docente</label>
-               </td>
-               <td>
-              <select id="menuDocentes" name="menuDocentes" class="form-select form-select-sm" aria-label=".form-select-sm example">
-                <option selected>Opciones</option>
-                {% for usuario in coleccionUsuarios %}
-                <option  name="usuario" value="{{ usuario.nombre}}">{{ usuario.nombre +" "+usuario.apellido}}</option>
-                {% endfor %}
-             
-              </select>
-            </td>
-            </tr>
-             <tr>
+            <form method="post" action="{{url_for('registroAsignacion')}}">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="menuDocentes">Docente</label>
+                  <select id="menuDocentes" name="menuDocentes" class="form-select custom-select"
+                    aria-label=".form-select-sm example">
+                    <option selected>Opciones</option>
+                    {% for usuario in coleccionUsuarios %}
+                    <option name="usuario" value="{{ usuario.nombre}}">{{ usuario.nombre +" "+usuario.apellido}}
+                    </option>
+                    {% endfor %}
 
-            <td>
-              <label for="menuMaterias">Materias</label>
-            </td>
-            <td>
-              <select id="menuMaterias" name="menuMaterias" class="form-select form-select-sm" aria-label=".form-select-sm example">
-                <option selected>Opciones</option>
-                {% for materia in coleccionMateria %}
-                <option  name="materia" value="{{ materia.name}}">{{ materia.name}}</option>
-                {% endfor %}      
-              </select>
-            </td>
-            </tr>
-            <tr>
-              <td>
-               <label for="menuAulas">Aulas</label>
-             </td>
-             <td>
-               <select id="menuAulas" name="menuAulas" class="form-select form-select-sm" aria-label=".form-select-sm example">
-                 <option selected>Aulas</option>
-                 {% for aula in coleccionAula %}
-                 <option  name="rol" value="{{ aula.name}}">{{ aula.name}}</option>
-                 {% endfor %}
-             
-               </select>
-             </td>
-             </tr>
-             <tr>
-             <td>
-              <label for="menuParalelos">Paralelos</label>
-            </td>
-            <td>
-              <select id="menuParalelos" name="menuParalelos" class="form-select form-select-sm" aria-label=".form-select-sm example">
-                <option selected>Paralelo</option>
-                {% for paralelo in coleccionParalelo %}
-                <option  name="rol" value="{{ paralelo.name}}">{{ paralelo.name}}</option>
-                {% endfor %}
-            
-              </select>
-            </td>
-            </tr>
-             <tr>
-              <td>
-              <label for="menuHorarioInicio">Horario Inicio</label>
-            </td>
-            <td>
-              <select id="menuHorarioInicio" name="menuHorarioInicio" class="form-select form-select-sm" aria-label=".form-select-sm example">
-                <option selected>Hora inicio</option>
-                {% for horario in coleccionHorarioInicio %}
-                <option  name="hora_inicio" value="{{horario.hora_inicio}}">{{ horario.hora_inicio}}</option>
-                {% endfor %}
-            
-              </select>
-            </td>
-            </tr>
-             <tr>
-              <td>
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
 
-              <label for="menuHorarioFin">Horario Fin</label>
-            </td>
-            <td>
-              <select id="menuHorarioFin" name="menuHorarioFin" class="form-select form-select-sm" aria-label=".form-select-sm example">
-                <option selected>Hora fin</option>
-                {% for horario in coleccionHorarioFin %}
-                <option  name="hora_fin" value="{{ horario.hora_fin}}">{{ horario.hora_fin}}</option>
-                {% endfor %}
-            
-              </select>
-            </td>
-            </tr>
-          </table>
+                  <label for="menuMaterias">Materias</label>
 
-                
-                 <!--Botón utilizado para ingresar al sitio web-->
-                <button type="submit" class="btn btn-primary bg-dark border border-info "  >Registro</button>
-                <br>
+                  <select id="menuMaterias" name="menuMaterias" class="form-select custom-select form-select-sm"
+                    aria-label=".form-select-sm example">
+                    <option selected>Opciones</option>
+                    {% for materia in coleccionMateria %}
+                    <option name="materia" value="{{ materia.name}}">{{ materia.name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="menuAulas">Aulas</label>
+                  <select id="menuAulas" name="menuAulas" class="form-select custom-select form-select-sm"
+                    aria-label=".form-select-sm example">
+                    <option selected>Aulas</option>
+                    {% for aula in coleccionAula %}
+                    <option name="rol" value="{{ aula.name}}">{{ aula.name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="menuParalelos">Paralelos</label>
 
-      
-              </form>
-            
-              <button type="submit" class="btn btn-lg btn-block btn-danger"><a class="btn btn-danger btn-block btn-signin text-white" href="/desactivarusuario.html" role="button">Desactivar docente</a></button>
-            
-          </div>
+                  <select id="menuParalelos" name="menuParalelos" class="form-select custom-select form-select-sm"
+                    aria-label=".form-select-sm example">
+                    <option selected>Paralelo</option>
+                    {% for paralelo in coleccionParalelo %}
+                    <option name="rol" value="{{ paralelo.name}}">{{ paralelo.name}}</option>
+                    {% endfor %}
+
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="menuHorarioInicio">Horario Inicio</label>
+
+                  <select id="menuHorarioInicio" name="menuHorarioInicio"
+                    class="form-select custom-select form-select-sm" aria-label=".form-select-sm example">
+                    <option selected>Hora inicio</option>
+                    {% for horario in coleccionHorarioInicio %}
+                    <option name="hora_inicio" value="{{horario.hora_inicio}}">{{ horario.hora_inicio}}</option>
+                    {% endfor %}
+
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="menuHorarioFin">Horario Fin</label>
+
+                  <select id="menuHorarioFin" name="menuHorarioFin" class="form-select custom-select form-select-sm"
+                    aria-label=".form-select-sm example">
+                    <option selected>Hora fin</option>
+                    {% for horario in coleccionHorarioFin %}
+                    <option name="hora_fin" value="{{ horario.hora_fin}}">{{ horario.hora_fin}}</option>
+                    {% endfor %}
+
+                  </select>
+                </div>
+
+                <!--Botón utilizado para ingresar al sitio web-->
+                <div class="form-group col-md-6">
+
+                  <button type="submit" class="btn btn-lg  btn-primary bg-success btn-block border border-info "><a
+                    class="btn btn-success btn-block btn-signin text-white">Registro</a></button>
+                  <br>
+
+                </div>
+            </form>
+            <div class="form-group col-md-6">
+
+              <button type="submit" class="btn btn-lg btn-block btn-danger"><a
+                  class="btn btn-danger btn-block btn-signin text-white" href="/desactivarusuario.html"
+                  role="button">Desactivar docente</a></button>
+            </div>
         </div>
       </div>
+    </div>
     </center>
-    
+
 </body>
+
 </html>
