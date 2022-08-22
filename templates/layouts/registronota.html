@@ -32,20 +32,32 @@
           <li>
             <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Estudiantes</a>
             <ul class="collapse list-unstyled" id="homeSubmenu">
-              <li>
-                <a href="/registrousuario.html">Paralelo A</a>
-              </li>
-              <li>
-                <a href="/registroestudiante.html">Paralelo B</a>
-              </li>
+              <form method="post" action="{{url_for('accederInicioEstudiante')}}" >
+                
+                <button type="submit">
+                <select id="menuParalelo" name="menuParalelo" class="form-select custom-select" aria-label=".form-select-sm example">
+
+                  {% for documento in coleccionParalelos %}
+                    
+                  <option  value="{{documento.paralelo}}"> Paralelo {{documento.paralelo}}</option>
+                     
+                    
+                
+                  {% endfor %}
+                </select>
+                    
+                   
+                  </button>
+                 
+
+              </form>
+             
+            
             </ul>
 
           <li class="active">
             <a href="/registronota.html">Registro de notas</a>
           </li>
-          </li>
-          <li>
-            <a href="/reporte.html">Reporte de calificaciones</a>
           </li>
 
         </ul>
@@ -94,7 +106,7 @@
               </select>
               <div class="form-group">
                 <label for="inputCalificacion">Calificacion</label>
-                <input type="text" class="form-control" id="inputCalificacion" name="calificacion" placeholder="">
+                <input type="number" class="form-control" id="inputCalificacion" name="calificacion" placeholder="">
              </div>
               
                

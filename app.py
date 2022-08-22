@@ -11,6 +11,10 @@ import pymongo
 from flask_bcrypt import Bcrypt 
 
 
+from flask_track_usage import TrackUsage
+from flask_track_usage.storage.mongo import MongoStorage
+
+
 #conexion base datos
 
 MONGO_HOST="localhost"
@@ -28,6 +32,9 @@ MONGO_COLECCIONPARALELO="paralelo"
 MONGO_COLECCIONHORARIO="horario"
 MONGO_COLECCIONNOTAS="notas"
 MONGO_COLECCIONAULAS="aula"
+MONGO_COLECCIONSTORAGE="storage"
+MONGO_COLECCIONSPARALELO_ESTUDIANTE="paralelo-estudiante"
+
 
 cliente=pymongo.MongoClient(MONGO_URI,serverSelectionTimeoutMS=MONGO_TIEMPO_FUERA)
 #base de datos
@@ -41,9 +48,15 @@ coleccionMateria=baseDatos[MONGO_COLECCIONMATERIA]
 coleccionParalelo=baseDatos[MONGO_COLECCIONPARALELO]
 coleccionNota=baseDatos[MONGO_COLECCIONNOTAS]
 coleccionAula=baseDatos[MONGO_COLECCIONAULAS]
+coleccionStorage=baseDatos[MONGO_COLECCIONSTORAGE]
+coleccionParaleloEstudiante=baseDatos[MONGO_COLECCIONSPARALELO_ESTUDIANTE]
 #Encuentra el primer documento
-x=coleccionRoles.find_one()
+x=coleccionParaleloEstudiante.find_one()
 print(x)
+
+
+#for p in log:
+ #   print(p)
 
 #instancia de la aplicación
 app = Flask(__name__)
@@ -54,6 +67,17 @@ app._static_folder = os.path.abspath("templates/static")
 
 UPLOAD_FOLDER = 'templates/static/imagenes'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+#mongo track
+
+
+#mongostore=MongoStorage(MONGO_BASEDATOS,MONGO_COLECCIONSTORAGE)
+#print(mongostore)
+#mongoColeccionStorage=MongoStorage(coleccionStorage)
+#track usage
+#track=TrackUsage(app,mongostore)
+#print(track)
+
 
 bcrypt = Bcrypt(app)
 #página principal del aplicativo
@@ -144,8 +168,44 @@ def accederRegistroNota():
     """Retorna pagina de Registro Nota"""
     query={"rol":{"$eq":"estudiante"}}
     usuario=coleccionUsuarios.find(query)
+    paralelo=coleccionParaleloEstudiante.find()
     
-    return render_template("layouts/registronota.html", coleccionUsuarios=usuario)
+    return render_template("layouts/registronota.html", coleccionUsuarios=usuario,coleccionParalelos=paralelo)
+#acceder a la pagina de usuarios registrados
+@app.route("/usuariosregistrados.html")
+def accederUsuariosRegistrados():
+    """Retorna pagina de usuarios registrados"""
+    
+    usuarioNombres=coleccionUsuarios.find()
+    usuarioApellidos=coleccionUsuarios.find()
+    usuarioCedulas=coleccionUsuarios.find()
+    usuarioCorreos=coleccionUsuarios.find()
+    usuarioRoles=coleccionUsuarios.find()
+    usuarioEstados=coleccionUsuarios.find()
+    
+    return render_template("layouts/usuariosregistrados.html", nombres=usuarioNombres, apellidos=usuarioApellidos,cedulas=usuarioCedulas,correos=usuarioCorreos,roles=usuarioRoles, estados=usuarioEstados)
+#Permite acceder a estudiante
+@app.route("/inicioestudiante.html", methods=['POST', 'GET'])
+def accederInicioEstudiante():
+    """Retorna pagina de inicio estudiante"""
+    if request.method == 'POST':
+        
+        query={'paralelo':request.form['menuParalelo']}
+        usuario=coleccionParaleloEstudiante.find(query)
+        print(usuario)
+        
+        return render_template("layouts/inicioestudiante.html", coleccionUsuarios=usuario)
+    
+
+#Permite acceder a asignacionestudiante
+@app.route("/asignacionestudiante.html")
+def accederAsignacionEstudiante():
+    """Retorna pagina de asignacione estudiante"""
+    query={"rol":{"$eq":"estudiante"}}
+    usuario=coleccionUsuarios.find(query)
+    paralelo=coleccionParalelo.find()
+    
+    return render_template("layouts/asignacionestudiante.html", coleccionUsuarios=usuario, coleccionParalelos=paralelo)
 
 #Permiter acceder a la página de login admin
 @app.route("/loginadmin.html")
@@ -171,6 +231,21 @@ def reporte():
     """Retorna pagina de reporte"""
 
     return render_template("layouts/reporte.html")
+
+queryLog={ "getLog":"startupWarnings"}
+    
+log=cliente.admin.command(queryLog)
+
+
+@app.route("/log.html",methods=['POST', 'GET'])
+
+#Permite acceder a la página de log
+def verlog():
+    """Retorna pagina de reporte"""
+
+    
+    return render_template("layouts/log.html", logging=log)
+    
 
 
 #Validación de usuario
@@ -288,6 +363,22 @@ def registroAsignacion():
             flash('Error')
             return accederAsignacion()
         return render_template("layouts/asignacion.html")
+#Registro de asignacion de paralelo un docente
+@app.route('/registroAsignacionestudiante', methods=['POST', 'GET'])
+def registroAsignacionEstudiante():
+    if request.method == 'POST':
+        existe_usuario =  coleccionUsuarios.find_one({'nombre' : request.form['menuEstudiantes']})
+        print(existe_usuario)
+        if existe_usuario:
+
+          
+            coleccionParaleloEstudiante.insert_one({'paralelo':request.form['menuParalelos'],'nombre' : request.form['menuEstudiantes']})
+            flash('Registrado')
+        else:
+            flash('Error')
+            return accederAsignacion()
+        return render_template("layouts/asignacionestudiante.html")
+
         
 #Registro de estudiante
 @app.route('/registroEstudiante', methods=['POST', 'GET'])
@@ -316,10 +407,12 @@ def registroEstudiante():
 #Registro de Nota
 @app.route('/registroNota', methods=['POST', 'GET'])
 def registroNota():
+   
     if request.method == 'POST':
         
         nota=request.form['calificacion']
-        if int(nota)>=1 and int(nota)<=5:
+        nota=int(nota)
+        if int(nota)>=1 and int(nota)<=5 and nota is not None:
             coleccionNota.insert_one({'cedula' : request.form['menuCedula'],'calificacion':request.form['calificacion']})
             flash('Registrado')
             return reporte()
@@ -338,6 +431,7 @@ def desactivarUsuario():
         if existe_usuario:
             actualizacion={"$set":{"estado":"inactivo"}}
             coleccionUsuarios.update_one(existe_usuario, actualizacion)
+            
             flash('Usuario Desactivado')
         else:
             flash('Error al Desactivar usuario')
