@@ -54,9 +54,6 @@
           <li>
             <a href="/usuariosregistrados.html">Usuarios registrados</a>
           </li>
-          <li>
-            <a href="/log.html">Logs</a>
-          </li>
         </ul>
 
         <div class="footer">
@@ -89,13 +86,13 @@
             <!--Sección de registro-->
             <!--Uso de cards en conjunto con nav y form para que el usuario envíe sus sugerencias-->
 
-            <h1>Registro</h1>
+            <h1>Asignación Estudiante-Paralelos</h1>
             <br>
-            <form method="post" action="{{url_for('registroAsignacion')}}">
+            <form method="post" action="{{url_for('registroAsignacionEstudiante')}}">
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label for="menuDocentes">Docente</label>
-                  <select id="menuDocentes" name="menuDocentes" class="form-select custom-select"
+                  <label for="menuEstudiantes">Estudiante</label>
+                  <select id="menuEstudiantes" name="menuEstudiantes" class="form-select custom-select"
                     aria-label=".form-select-sm example">
                     <option selected>Opciones</option>
                     {% for usuario in coleccionUsuarios %}
@@ -105,64 +102,20 @@
 
                   </select>
                 </div>
-                <div class="form-group col-md-6">
-
-                  <label for="menuMaterias">Materias</label>
-
-                  <select id="menuMaterias" name="menuMaterias" class="form-select custom-select form-select-sm"
-                    aria-label=".form-select-sm example">
-                    <option selected>Opciones</option>
-                    {% for materia in coleccionMateria %}
-                    <option name="materia" value="{{ materia.name}}">{{ materia.name}}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="menuAulas">Aulas</label>
-                  <select id="menuAulas" name="menuAulas" class="form-select custom-select form-select-sm"
-                    aria-label=".form-select-sm example">
-                    <option selected>Aulas</option>
-                    {% for aula in coleccionAula %}
-                    <option name="rol" value="{{ aula.name}}">{{ aula.name}}</option>
-                    {% endfor %}
-                  </select>
-                </div>
+          
                 <div class="form-group col-md-6">
                   <label for="menuParalelos">Paralelos</label>
 
                   <select id="menuParalelos" name="menuParalelos" class="form-select custom-select form-select-sm"
                     aria-label=".form-select-sm example">
                     <option selected>Paralelo</option>
-                    {% for paralelo in coleccionParalelo %}
-                    <option name="rol" value="{{ paralelo.name}}">{{ paralelo.name}}</option>
+                    {% for paralelo in coleccionParalelos %}
+                    <option name="paralelo" value="{{ paralelo.name}}">{{ paralelo.name}}</option>
                     {% endfor %}
 
                   </select>
                 </div>
-                <div class="form-group col-md-6">
-                  <label for="menuHorarioInicio">Horario Inicio</label>
-
-                  <select id="menuHorarioInicio" name="menuHorarioInicio"
-                    class="form-select custom-select form-select-sm" aria-label=".form-select-sm example">
-                    <option selected>Hora inicio</option>
-                    {% for horario in coleccionHorarioInicio %}
-                    <option name="hora_inicio" value="{{horario.hora_inicio}}">{{ horario.hora_inicio}}</option>
-                    {% endfor %}
-
-                  </select>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="menuHorarioFin">Horario Fin</label>
-
-                  <select id="menuHorarioFin" name="menuHorarioFin" class="form-select custom-select form-select-sm"
-                    aria-label=".form-select-sm example">
-                    <option selected>Hora fin</option>
-                    {% for horario in coleccionHorarioFin %}
-                    <option name="hora_fin" value="{{ horario.hora_fin}}">{{ horario.hora_fin}}</option>
-                    {% endfor %}
-
-                  </select>
-                </div>
+    
 
                 <!--Botón utilizado para ingresar al sitio web-->
                 <div class="form-group col-md-6">
@@ -173,12 +126,6 @@
 
                 </div>
             </form>
-            <div class="form-group col-md-6">
-
-              <button type="submit" class="btn btn-lg btn-block btn-danger"><a
-                  class="btn btn-danger btn-block btn-signin text-white" href="/desactivarusuario.html"
-                  role="button">Desactivar docente</a></button>
-            </div>
         </div>
       </div>
     </div>
