@@ -59,6 +59,7 @@ db.aula.insert_one([{ "_id" : 1, "name" : "A1"},
 { "_id" : 2, "name" : "A2"},
 { "_id" : 3, "name" : "C"},]);
 db.usuarios.find({"rol":{$eq:"docente"}}).pretty()
+db.createCollection("paralelo-estudiante")
 
 db.horario.find().pretty()
 db.paralelo.find().pretty()
