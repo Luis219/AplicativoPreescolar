@@ -294,7 +294,7 @@ def registroUsuario():
                 session['rol']=request.form['menuRoles']
                 session['permiso']=permisosDocente
                 flash('Registro con exito')
-                return reporte()
+                return render_template('layouts/registrousuario.html')
 
             elif rol=="administrador":
                 numeroUsuarios=coleccionUsuarios.count_documents({})
@@ -316,8 +316,10 @@ def registroUsuario():
                     session['rol']=request.form['menuRoles']
                     session['permiso']=permisosAdministrador
                     flash('Registro con exito')
-                    return reporte()
+                    return render_template('layouts/registrousuario.html')
+                flash('Error')    
                 return render_template('layouts/registrousuario.html')
+            flash('Error')    
             return render_template('layouts/registrousuario.html')
             
         return render_template('layouts/registrousuario.html')
