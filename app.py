@@ -51,8 +51,10 @@ coleccionAula=baseDatos[MONGO_COLECCIONAULAS]
 coleccionStorage=baseDatos[MONGO_COLECCIONSTORAGE]
 coleccionParaleloEstudiante=baseDatos[MONGO_COLECCIONSPARALELO_ESTUDIANTE]
 #Encuentra el primer documento
-x=coleccionParaleloEstudiante.find_one()
-print(x)
+x=coleccionParaleloEstudiante.find()
+for i in x:
+    print(i)
+
 
 
 #for p in log:
@@ -67,16 +69,6 @@ app._static_folder = os.path.abspath("templates/static")
 
 UPLOAD_FOLDER = 'templates/static/imagenes'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-#mongo track
-
-
-#mongostore=MongoStorage(MONGO_BASEDATOS,MONGO_COLECCIONSTORAGE)
-#print(mongostore)
-#mongoColeccionStorage=MongoStorage(coleccionStorage)
-#track usage
-#track=TrackUsage(app,mongostore)
-#print(track)
 
 
 bcrypt = Bcrypt(app)
@@ -184,7 +176,7 @@ def accederUsuariosRegistrados():
     usuarioEstados=coleccionUsuarios.find()
     
     return render_template("layouts/usuariosregistrados.html", nombres=usuarioNombres, apellidos=usuarioApellidos,cedulas=usuarioCedulas,correos=usuarioCorreos,roles=usuarioRoles, estados=usuarioEstados)
-#Permite acceder a estudiante
+#Permite acceder a login estudiante
 @app.route("/inicioestudiante.html", methods=['POST', 'GET'])
 def accederInicioEstudiante():
     """Retorna pagina de inicio estudiante"""
@@ -195,6 +187,7 @@ def accederInicioEstudiante():
         print(usuario)
         
         return render_template("layouts/inicioestudiante.html", coleccionUsuarios=usuario)
+    return render_template("layouts/inicioestudiante.html")
     
 
 #Permite acceder a asignacionestudiante
@@ -261,7 +254,7 @@ def loginusuario():
             
             if  bcrypt.check_password_hash(login_usuario['contrasenia'],contrasenia):
                 session['correo'] = request.form['correo']
-                return reporte()
+                return accederRegistroNota()
             else:
                 flash('Error al ingresar usuario')
                 return usuario()
@@ -373,7 +366,6 @@ def registroAsignacionEstudiante():
         print(existe_usuario)
         if existe_usuario:
 
-          
             coleccionParaleloEstudiante.insert_one({'paralelo':request.form['menuParalelos'],'nombre' : request.form['menuEstudiantes']})
             flash('Registrado')
         else:
@@ -400,7 +392,7 @@ def registroEstudiante():
             imagen.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             coleccionUsuarios.insert_one({'imagen':imagen.filename,'cedula' : request.form['cedula'],'nombre':request.form['nombre'],'apellido':request.form['apellido'],'telefono':request.form['telefono'],'edad':request.form['edad'],'materia':request.form['menuMateria'],'rol':request.form['menuRoles'],'correo':request.form['correo'],'contrasenia':hashpass,'estado':"activo"})
             flash('Registrado con exito')
-            return reporte()
+            return render_template('layouts/registroestudiante.html')
         else:
             flash('Error al registrar')
         return render_template('layouts/registroestudiante.html')
