@@ -425,9 +425,11 @@ def registroNota():
 @app.route('/desactivarUsuario', methods=['POST', 'GET'])
 def desactivarUsuario():
     if request.method == 'POST':
-        query={"rol":{"$ne":"administrador"}}
-        existe_usuario =  coleccionUsuarios.find_one(query,{'correo' : request.form['correo']})
-        if existe_usuario:
+        query={"rol":{"$ne":"administrador"},'correo' : request.form['correo']}
+        existe_usuario =  coleccionUsuarios.find_one(query)
+        print("eee")
+        print(existe_usuario)
+        if existe_usuario is not None:
             actualizacion={"$set":{"estado":"inactivo"}}
             coleccionUsuarios.update_one(existe_usuario, actualizacion)
             
