@@ -409,12 +409,12 @@ def registroNota():
    
     if request.method == 'POST':
         
-        nota=request.form['calificacion']
-        nota=int(nota)
-        if int(nota)>=1 and int(nota)<=5 and nota is not None:
+        
+        
+        if validarNota(request.form['calificacion']):
             coleccionNota.insert_one({'cedula' : request.form['menuCedula'],'calificacion':request.form['calificacion']})
             flash('Registrado')
-            return reporte()
+            return obtenerDatos()
         else:
             flash('Error al registrar')
             return accederRegistroNota()
@@ -500,9 +500,18 @@ def validarEdad(edad):
         return False
 def validarContrasenia(contrasenia):
     '''
-    Funcion que valida que la edad debe estar entre 3 y 5 anios
+    Funcion que valida que la longitud de la contrasenia sea igual o mayor a 8
     '''
     if re.search(".{8,}", contrasenia):
+        return True
+    else:
+        return False
+
+def validarNota(nota):
+    '''
+    Funcion que valida que la nota debe estar entre 0 y 5 anios
+    '''
+    if re.search("^[0-5]$", nota):
         return True
     else:
         return False
