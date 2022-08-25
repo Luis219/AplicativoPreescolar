@@ -1,5 +1,4 @@
 
-
 import os
 from flask import Flask, jsonify, make_response, render_template, request, flash, url_for, redirect, session
 from werkzeug.utils import secure_filename
@@ -7,6 +6,7 @@ import cryptocode
 import json
 from numpy import delete
 import pymongo
+import re
 
 from flask_bcrypt import Bcrypt 
 
@@ -267,52 +267,57 @@ def registroUsuario():
 
         if existe_usuario is None:
             rol=request.form['menuRoles']
-            if rol=="docente":
-                queryPermiso={"_id":{"$in":[1,2]}}
-            
-                permisosDocente=list(coleccionPermisos.find(queryPermiso))
-                contrasenia=request.form['contrasenia']
-
-               
-                hashpass =bcrypt.generate_password_hash(contrasenia).decode('utf-8') 
-                coleccionUsuarios.insert_one({'nombre':request.form['nombre'],'apellido':request.form['apellido'],'telefono':request.form['telefono'],'rol':request.form['menuRoles'],'permiso':permisosDocente,  'correo' : request.form['correo'], 'contrasenia' : hashpass,"estado":"activo"})
-                session['nombre'] = request.form['nombre']
-                session['apellido'] = request.form['apellido']
-                session['telefono'] = request.form['telefono']
-                session['correo'] = request.form['correo']
-                session['rol']=request.form['menuRoles']
-                session['permiso']=permisosDocente
-                flash('Registro con exito')
-                return render_template('layouts/registrousuario.html')
-
-            elif rol=="administrador":
-                numeroUsuarios=coleccionUsuarios.count_documents({})
-                if numeroUsuarios==0:
-                    queryPermiso={"_id":{"$in":[3,4,5,6,7,8]}}
+            if  validarCaracteres(request.form['nombre']) and validarCaracteres(request.form['apellido']) and validarTelefono(request.form['telefono']) and validarEmail(request.form['correo']) and validarContrasenia(request.form['contrasenia']):
+                if rol=="docente":
+                    queryPermiso={"_id":{"$in":[1,2]}}
                 
-                    permisosAdministrador=list(coleccionPermisos.find(queryPermiso))
+                    permisosDocente=list(coleccionPermisos.find(queryPermiso))
                     contrasenia=request.form['contrasenia']
 
-                
+              
                     hashpass =bcrypt.generate_password_hash(contrasenia).decode('utf-8') 
-
-            
-                    coleccionUsuarios.insert_one({'nombre':request.form['nombre'],'apellido':request.form['apellido'],'telefono':request.form['telefono'],'rol':request.form['menuRoles'],'permiso':permisosAdministrador,  'correo' : request.form['correo'], 'contrasenia' : hashpass, "estado":"activo"})
+                    coleccionUsuarios.insert_one({'nombre':request.form['nombre'],'apellido':request.form['apellido'],'telefono':request.form['telefono'],'rol':request.form['menuRoles'],'permiso':permisosDocente,  'correo' : request.form['correo'], 'contrasenia' : hashpass,"estado":"activo"})
                     session['nombre'] = request.form['nombre']
                     session['apellido'] = request.form['apellido']
                     session['telefono'] = request.form['telefono']
                     session['correo'] = request.form['correo']
                     session['rol']=request.form['menuRoles']
-                    session['permiso']=permisosAdministrador
+                    session['permiso']=permisosDocente
                     flash('Registro con exito')
-                    return render_template('layouts/registrousuario.html')
-                flash('Error')    
-                return render_template('layouts/registrousuario.html')
-            flash('Error')    
-            return render_template('layouts/registrousuario.html')
+                    return accederRegistroUsuario()
+                        
             
-        return render_template('layouts/registrousuario.html')
-    return render_template('layouts/registrousuario.html')
+                elif rol=="administrador":
+                    numeroUsuarios=coleccionUsuarios.count_documents({})
+                    if numeroUsuarios==0:
+                        queryPermiso={"_id":{"$in":[3,4,5,6,7,8]}}
+                    
+                        permisosAdministrador=list(coleccionPermisos.find(queryPermiso))
+                        contrasenia=request.form['contrasenia']
+
+                    
+                        hashpass =bcrypt.generate_password_hash(contrasenia).decode('utf-8') 
+
+                
+                        coleccionUsuarios.insert_one({'nombre':request.form['nombre'],'apellido':request.form['apellido'],'telefono':request.form['telefono'],'rol':request.form['menuRoles'],'permiso':permisosAdministrador,  'correo' : request.form['correo'], 'contrasenia' : hashpass, "estado":"activo"})
+                        session['nombre'] = request.form['nombre']
+                        session['apellido'] = request.form['apellido']
+                        session['telefono'] = request.form['telefono']
+                        session['correo'] = request.form['correo']
+                        session['rol']=request.form['menuRoles']
+                        session['permiso']=permisosAdministrador
+                        flash('Registro con exito')
+                        return accederRegistroUsuario()
+                    flash('Error')    
+                    return accederRegistroUsuario()
+                flash('Error')    
+                return accederRegistroUsuario()
+            else:
+                    flash('Error-datos ingresados incorrectamente')
+                    return accederRegistroUsuario()
+            
+        return accederRegistroUsuario()
+    return accederRegistroUsuario()
 
 @app.route("/validaLoginAdmin", methods=['POST', 'GET'])
 #Valida un usuario con el rol administrador
@@ -383,15 +388,19 @@ def registroEstudiante():
 
                 
         hashpass =bcrypt.generate_password_hash(contrasenia).decode('utf-8') 
-       
-        if existe_usuario is None and int(edad)>=3 and int(edad)<=5:
-            imagen.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            coleccionUsuarios.insert_one({'imagen':imagen.filename,'cedula' : request.form['cedula'],'nombre':request.form['nombre'],'apellido':request.form['apellido'],'telefono':request.form['telefono'],'edad':request.form['edad'],'materia':request.form['menuMateria'],'rol':request.form['menuRoles'],'correo':request.form['correo'],'contrasenia':hashpass,'estado':"activo"})
-            flash('Registrado con exito')
-            return render_template('layouts/registroestudiante.html')
+        if validarCaracteres(request.form['nombre']) and validarCaracteres(request.form['apellido']) and validarTelefono(request.form['telefono']) and validarEdad(request.form['edad']) and validarEmail(request.form['correo']) and validarContrasenia(contrasenia):
+            if existe_usuario is None:
+                imagen.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                coleccionUsuarios.insert_one({'imagen':imagen.filename,'cedula' : request.form['cedula'],'nombre':request.form['nombre'],'apellido':request.form['apellido'],'telefono':request.form['telefono'],'edad':request.form['edad'],'materia':request.form['menuMateria'],'rol':request.form['menuRoles'],'correo':request.form['correo'],'contrasenia':hashpass,'estado':"activo"})
+                flash('Registrado con exito')
+                return accederestudiante()
+            else:
+                flash('Error al registrar')
+            return accederestudiante()
         else:
-            flash('Error al registrar')
-        return render_template('layouts/registroestudiante.html')
+            flash('Error- Datos incorrectos')
+            return accederestudiante()
+
 
 
 #Registro de Nota
@@ -438,6 +447,65 @@ def obtenerDatos():
     calificacion=coleccionNota.find()
    
     return render_template("layouts/registronota.html", cedulas=cedula,  calificaciones=calificacion)
+
+#expresiones regulares
+def validarCedula(cedula):
+    '''
+    Funcion que valida que numero de cedula tenga 10 digitos
+    '''
+    if re.search("^(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)$", cedula):
+        return True
+    else:
+        return False
+def validarTelefono(telefono):
+    '''
+    Funcion que valida que numero de telefono tenga 10 digitos
+    '''
+    if re.search("^[0][9](\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)$", telefono):
+        return True
+    else:
+        return False
+
+def validarCaracteres(cadenaValidar):
+    '''
+    Funcion que valida que la cadena solo contenga letras
+    '''
+    if re.match("^[a-zA-Z]*$", cadenaValidar):
+        return True
+    else:
+        return False
+
+def validarEmail(emailValidar):
+    '''
+    Funcion que valida que el correo solo sea (@gmail.com) o (@espe.edu.ec)
+    '''
+    if re.match("^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$", emailValidar):
+        if re.match("^[a-zA-Z0-9.+_-]+@[gmail]+\.[com]+$", emailValidar):
+            return True
+        else:
+            if re.match("^[a-zA-Z0-9.+_-]+@[espe.edu]+\.[ec]+$", emailValidar):
+                return True
+            else:
+                return False
+    else:
+        return False
+
+def validarEdad(edad):
+    '''
+    Funcion que valida que la edad debe estar entre 3 y 5 anios
+    '''
+    if re.search("^[3-5]$", edad):
+        return True
+    else:
+        return False
+def validarContrasenia(contrasenia):
+    '''
+    Funcion que valida que la edad debe estar entre 3 y 5 anios
+    '''
+    if re.search(".{8,}", contrasenia):
+        return True
+    else:
+        return False
 
 
 
