@@ -1,3 +1,16 @@
+use preescolar
+db.createCollection("horario");
+db.createCollection("usuarios");
+db.createCollection("permisos");
+db.createCollection("rols");
+db.createCollection("materia");
+db.createCollection("paralelo");
+db.createCollection("horario");
+db.createCollection("notas");
+db.createCollection("aula");
+db.createCollection("paralelo-estudiante");
+
+
 db.permisos.insertMany([
 { "_id" : 1, "descripcion" : "ver calificaciones" },
 { "_id" : 2, "descripcion" : "actualizar calificaciones" },
@@ -59,7 +72,6 @@ db.aula.insert_one([{ "_id" : 1, "name" : "A1"},
 { "_id" : 2, "name" : "A2"},
 { "_id" : 3, "name" : "C"},]);
 db.usuarios.find({"rol":{$eq:"docente"}}).pretty()
-db.createCollection("paralelo-estudiante")
 
 db.horario.find().pretty()
 db.paralelo.find().pretty()
