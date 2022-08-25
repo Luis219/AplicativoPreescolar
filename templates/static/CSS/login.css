@@ -12,3 +12,16 @@ body {
   position: fixed;
   background-repeat: no-repeat;
 }
+.img{
+  background-image: url("../imagenes/fond12.jpg");
+
+
+}
+.login h2 {
+
+  font-family: 'Kaushan Script', cursive;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #067e78;
+  font-style: italic
+}

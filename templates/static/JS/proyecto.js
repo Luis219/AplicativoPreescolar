@@ -80,7 +80,7 @@ App.Main = {
         this.unknown.anchor.setTo(.5);
         fadeInTween(this.unknown, 250);
         
-        showGt("Tap speaker button to listen animal sound./ Presiona el botón para escuchar el sonido");
+       /* showGt("Tap speaker button to listen animal sound./ Presiona el botón para escuchar el sonido");*/
        
        
         
@@ -179,6 +179,7 @@ function checkAnswer(x, element){
             sndCorrect.play();
             score=score+1;
             showGt("<h1>Correcto!</h1>"+score);
+            
             preguntas=preguntas+1;
           
                   
