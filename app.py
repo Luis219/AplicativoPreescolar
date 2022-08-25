@@ -11,10 +11,6 @@ import pymongo
 from flask_bcrypt import Bcrypt 
 
 
-from flask_track_usage import TrackUsage
-from flask_track_usage.storage.mongo import MongoStorage
-
-
 #conexion base datos
 
 MONGO_HOST="localhost"
