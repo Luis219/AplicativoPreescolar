@@ -172,7 +172,7 @@ function checkAnswer(x, element){
         }else{
            
            
-           // score=score;
+         
        
             console.log("Correcto!");
             
@@ -188,7 +188,7 @@ function checkAnswer(x, element){
             showGt("<h2></h2>",score);
             */
         }
-        contarPreguntas(preguntas)
+        contarPreguntas(preguntas,score)
         verScore(score);
         
         setTimeout(function(){
@@ -201,10 +201,19 @@ function checkAnswer(x, element){
 
 
 
-function contarPreguntas(preguntas){
+function contarPreguntas(preguntas,score){
     //verificar la cantidad de Preguntas
-    if(preguntas==5){
-        redireccion();
+    if(preguntas==2){
+        
+        $.ajax({
+            accept: 'application/json',
+            type : 'POST',
+            
+            url : "/obtenerPuntaje",
+            data : {'data':score}
+          });
+          redireccion();
+          
     }
     console.log(preguntas)
     
@@ -214,16 +223,22 @@ var pagina = '/puntaje.html';
 
 function verScore(score){
     //ver puntaje
+    
     return score;
 }
 
 
 function redireccion() {
+   
     //redirecciona a una página de puntaje
     document.location.href=pagina;
-    var funcionVerScore = document.location.href.getElementById('botonPuntaje');
-    funcionVerScore.addEventListener('click', verScore(score),true);
+    //var funcionVerScore = document.location.href.getElementById('botonPuntaje');
+    //funcionVerScore.addEventListener('click', verScore(score),true);
+    
     }
+
+   
+
 
 function fadeInTween(element, delay){
     //posiciones de los objetos

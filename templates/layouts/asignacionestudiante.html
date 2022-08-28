@@ -109,6 +109,18 @@
 
                   </select>
                 </div>
+                <div class="form-group col-md-6">
+                  <label for="menuEstudiantes">Estudiante</label>
+                  <select id="menuCedulas" name="menuCedulas" class="form-select custom-select"
+                    aria-label=".form-select-sm example">
+                    <option selected>Opciones</option>
+                    {% for usuario in coleccionCedulas %}
+                    <option name="usuario" value="{{ usuario.cedula}}">{{ usuario.cedula}}
+                    </option>
+                    {% endfor %}
+
+                  </select>
+                </div>
           
                 <div class="form-group col-md-6">
                   <label for="menuParalelos">Paralelos</label>

@@ -1,7 +1,9 @@
 
+from ast import Return
 import os
 from flask import Flask, jsonify, make_response, render_template, request, flash, url_for, redirect, session
 from werkzeug.utils import secure_filename
+from flask_restful import reqparse
 import cryptocode
 import json
 from numpy import delete
@@ -92,12 +94,7 @@ def index():
 def evaluacion():
 
     return render_template("layouts/evaluacion.html")
-@app.route("/puntaje.html")
 
-#retorna la página de calificación de la app
-def puntaje():
-
-    return render_template("layouts/puntaje.html")
 
 #Permite acceder a la página inicial del aplicativo
 @app.route("/estudiante.html")
@@ -194,7 +191,7 @@ def accederAsignacionEstudiante():
     usuario=coleccionUsuarios.find(query)
     paralelo=coleccionParalelo.find()
     
-    return render_template("layouts/asignacionestudiante.html", coleccionUsuarios=usuario, coleccionParalelos=paralelo)
+    return render_template("layouts/asignacionestudiante.html", coleccionUsuarios=usuario,  coleccionCedulas=usuario, coleccionParalelos=paralelo)
 
 #Permiter acceder a la página de login admin
 @app.route("/loginadmin.html")
@@ -363,11 +360,12 @@ def registroAsignacion():
 @app.route('/registroAsignacionestudiante', methods=['POST', 'GET'])
 def registroAsignacionEstudiante():
     if request.method == 'POST':
-        existe_usuario =  coleccionUsuarios.find_one({'nombre' : request.form['menuEstudiantes']})
+        existe_usuario =  coleccionUsuarios.find_one({'cedula' : request.form['menuCedulas']})
         print(existe_usuario)
         if existe_usuario:
 
-            coleccionParaleloEstudiante.insert_one({'paralelo':request.form['menuParalelos'],'nombre' : request.form['menuEstudiantes']})
+            coleccionParaleloEstudiante.insert_one({'paralelo':request.form['menuParalelos'],'cedula' : request.form['menuCedulas'],'nombre' : request.form['menuEstudiantes']})
+            print(coleccionParaleloEstudiante)
             flash('Registrado')
         else:
             flash('Error')
@@ -429,13 +427,18 @@ def desactivarUsuario():
         existe_usuario =  coleccionUsuarios.find_one(query)
         print("eee")
         print(existe_usuario)
-        if existe_usuario is not None:
+        if existe_usuario is not None and request.form['activardesactivar']=="desactivar":
             actualizacion={"$set":{"estado":"inactivo"}}
             coleccionUsuarios.update_one(existe_usuario, actualizacion)
             
             flash('Usuario Desactivado')
+        elif existe_usuario and  request.form['activardesactivar']=="activar":
+            actualizacion={"$set":{"estado":"activo"}}
+            coleccionUsuarios.update_one(existe_usuario, actualizacion)
+            
+            flash('Usuario Activado')
         else:
-            flash('Error al Desactivar usuario')
+            flash('Error al Desactivar/Activar usuario')
         
 
     return render_template('layouts/desactivarusuario.html')
@@ -447,8 +450,44 @@ def obtenerDatos():
 
     cedula=coleccionNota.find()
     calificacion=coleccionNota.find()
+    
    
     return render_template("layouts/registronota.html", cedulas=cedula,  calificaciones=calificacion)
+
+
+def parse_arg_from_requests(arg, **kwargs):
+    parse = reqparse.RequestParser()
+    parse.add_argument(arg, **kwargs)
+    args = parse.parse_args()
+    return args[arg]
+#Función para obtener puntaje
+@app.route('/obtenerPuntaje', methods=['POST','GET'])
+def obtenerPuntaje():
+    """Obtención de datos estudiante""" 
+    
+    if request.method=='POST':
+
+        nuevopuntaje=request.form['data']
+        print(nuevopuntaje)
+        coleccionNota.insert_one({'calificacion':nuevopuntaje})
+    
+
+        
+        #return ('',204)
+        return  url_for('',204)
+  
+puntajeh=coleccionNota.find().limit(1).sort([("_id", pymongo.DESCENDING)])
+print(puntajeh)
+@app.route("/puntaje.html")
+
+
+#retorna la página de calificación de la app
+def puntaje():
+    
+    puntaje=coleccionNota.find().limit(1).sort([("_id", pymongo.DESCENDING)])
+    return render_template("layouts/puntaje.html",puntajes=puntaje)
+
+
 
 #expresiones regulares
 def validarCedula(cedula):
