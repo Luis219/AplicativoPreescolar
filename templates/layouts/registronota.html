@@ -130,28 +130,35 @@
       </thead>
 
       <tbody>
+        {%for documento in datosCalificacion %}
+        
         <tr> 
           <!--Se recorren los ids-->
-          <td >
-              {%for documento in cedulas %}
-              <p class="card-text">{{ documento.cedula }}</p>
-              {%endfor%}
+          <form method="POST" action="{{url_for('editarDatos')}}"  >
+              
+              <td >
+              <input type="text" readonly class="card-text"  name="cedula" value="{{ documento.cedula }}" >
+                
             
-          </td>
-
+               </td>
             <!--Se recorren los nombres de alumnos-->
             <!--Se recorren los ids-->
-          
+ 
            
            <td>
               <!--Se recorren los puntajes-->
-              {%for documento in calificaciones %}
-              <p class="card-text">{{ documento.calificacion}}</p>
-              {%endfor%}
+              
+              <input type="text" class="card-text"  name="calificacion" value="{{documento.calificacion}}" >
+             
             </td>
+           <td>
+            <button type="submit">Editar</button>
+           </td>
+          </form>
          
 
         </tr>
+        {%endfor%}
 
       </tbody>
 

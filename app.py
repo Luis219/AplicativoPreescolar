@@ -452,18 +452,35 @@ def desactivarUsuario():
 def obtenerDatos():
     """Obtención de datos estudiante"""  
 
-    cedula=coleccionNota.find()
-    calificacion=coleccionNota.find()
+    
+    datosCalificacion=coleccionNota.find()
+    coleccionUsuarios1=coleccionUsuarios.find()
+    
     
    
-    return render_template("layouts/registronota.html", cedulas=cedula,  calificaciones=calificacion)
+    return render_template("layouts/registronota.html",datosCalificacion=datosCalificacion, coleccionUsuarios=coleccionUsuarios1)
+
+#Función que edita calificaciones de alumnos
+@app.route('/editarDatos', methods=['POST', 'GET'])
+def editarDatos():
+    """Obtención de datos estudiante"""  
+    if request.method=='POST':
+
+        query={'cedula' : request.form['cedula']}
+        existe_usuario =  coleccionNota.find_one(query)
+        if existe_usuario:
+            actualizacion={"$set":{"calificacion": request.form['calificacion']}}
+            coleccionNota.update_one(existe_usuario, actualizacion)
+           # datosCalificacion=coleccionNota.find()
+            return obtenerDatos()
+        else:
+            flash('Error')
+            return obtenerDatos()
+    
+   
+    return flash('Error')
 
 
-def parse_arg_from_requests(arg, **kwargs):
-    parse = reqparse.RequestParser()
-    parse.add_argument(arg, **kwargs)
-    args = parse.parse_args()
-    return args[arg]
 #Función para obtener puntaje
 @app.route('/obtenerPuntaje', methods=['POST','GET'])
 def obtenerPuntaje():
