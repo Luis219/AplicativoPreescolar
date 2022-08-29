@@ -1,6 +1,19 @@
+<<<<<<< HEAD
 import os 
 from flask import Flask, render_template
 from routes import *
+=======
+
+from ast import Return
+import os
+from pickle import TRUE
+from flask import Flask, jsonify, make_response, render_template, request, flash, url_for, redirect, session
+from werkzeug.utils import secure_filename
+from flask_restful import reqparse
+import cryptocode
+import json
+from numpy import delete
+>>>>>>> 95ac7381d79c7ce7c10a2e24505b7ac55b9790b8
 import pymongo
 from flask_bcrypt import Bcrypt 
 
@@ -57,7 +70,7 @@ app.secret_key = "luisparedez123"
 #rutas de la carpeta templates/static
 app._static_folder = os.path.abspath("templates/static")
 
-UPLOAD_FOLDER = 'templates/static/imagenes'
+UPLOAD_FOLDER = 'imagenescargadas'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -107,6 +120,63 @@ def usuario():
 
     return render_template("layouts/loginusuario.html")
 
+<<<<<<< HEAD
+=======
+#Permite acceder a la página de registro de estudiante
+@app.route("/registroestudiante.html")
+def accederestudiante():
+    """Retorna Registro Estudiantes"""
+    materia=coleccionMateria.find()
+    roles=coleccionRoles.find()
+
+    return render_template("layouts/registroestudiante.html", coleccionMateria=materia, coleccionRoles=roles)
+#Permite acceder a la página de registro Nota
+@app.route("/registronota.html")
+def accederRegistroNota():
+    """Retorna pagina de Registro Nota"""
+    query={"rol":{"$eq":"estudiante"}}
+    usuario=coleccionUsuarios.find(query)
+    paralelo=coleccionParaleloEstudiante.find()
+    
+    return render_template("layouts/registronota.html", coleccionUsuarios=usuario,coleccionParalelos=paralelo)
+#acceder a la pagina de usuarios registrados
+@app.route("/usuariosregistrados.html")
+def accederUsuariosRegistrados():
+    """Retorna pagina de usuarios registrados"""
+    
+    usuarioNombres=coleccionUsuarios.find()
+    usuarioApellidos=coleccionUsuarios.find()
+    usuarioCedulas=coleccionUsuarios.find()
+    usuarioCorreos=coleccionUsuarios.find()
+    usuarioRoles=coleccionUsuarios.find()
+    usuarioEstados=coleccionUsuarios.find()
+    
+    return render_template("layouts/usuariosregistrados.html", nombres=usuarioNombres, apellidos=usuarioApellidos,cedulas=usuarioCedulas,correos=usuarioCorreos,roles=usuarioRoles, estados=usuarioEstados)
+#Permite acceder a login estudiante
+@app.route("/inicioestudiante.html", methods=['POST', 'GET'])
+def accederInicioEstudiante():
+    """Retorna pagina de inicio estudiante"""
+    if request.method == 'POST':
+        
+        query={'paralelo':request.form['menuParalelo']}
+        usuario=coleccionParaleloEstudiante.find(query)
+        print(usuario)
+        
+        return render_template("layouts/inicioestudiante.html", coleccionUsuarios=usuario)
+    return render_template("layouts/inicioestudiante.html")
+    
+
+#Permite acceder a asignacionestudiante
+@app.route("/asignacionestudiante.html")
+def accederAsignacionEstudiante():
+    """Retorna pagina de asignacione estudiante"""
+    query={"rol":{"$eq":"estudiante"}}
+    usuario=coleccionUsuarios.find(query)
+    paralelo=coleccionParalelo.find()
+    
+    return render_template("layouts/asignacionestudiante.html",  coleccionCedulas=usuario, coleccionParalelos=paralelo)
+
+>>>>>>> 95ac7381d79c7ce7c10a2e24505b7ac55b9790b8
 #Permiter acceder a la página de login admin
 @app.route("/loginadmin.html")
 
@@ -146,6 +216,356 @@ def verlog():
     return render_template("layouts/log.html", logging=log)
     
 
+<<<<<<< HEAD
+=======
+
+#Validación de usuario
+@app.route("/loginusuario",  methods=['POST'])
+
+def loginusuario():
+        "Validar Login de usuarios"
+        
+    
+        login_usuario = coleccionUsuarios.find_one({'correo' : request.form['correo'],'rol':'docente','estado':'activo'})
+        contrasenia=request.form['contrasenia']
+        if login_usuario:
+            
+            if  bcrypt.check_password_hash(login_usuario['contrasenia'],contrasenia):
+                session['correo'] = request.form['correo']
+                return accederRegistroNota()
+            else:
+                flash('Error al ingresar usuario')
+                return usuario()
+        else:
+                flash('Error al ingresar usuario')
+                return usuario()
+
+#Registra un nuevo usuario
+@app.route('/registroUsuario', methods=['POST', 'GET'])
+def registroUsuario():
+    if request.method == 'POST':
+        
+        existe_usuario =  coleccionUsuarios.find_one({'correo' : request.form['correo']})
+
+        if existe_usuario is None:
+            rol=request.form['menuRoles']
+            if  validarCaracteres(request.form['nombre']) and validarCaracteres(request.form['apellido']) and validarTelefono(request.form['telefono']) and validarEmail(request.form['correo']) and validarContrasenia(request.form['contrasenia']):
+                if rol=="docente":
+                    queryPermiso={"_id":{"$in":[1,2]}}
+                
+                    permisosDocente=list(coleccionPermisos.find(queryPermiso))
+                    contrasenia=request.form['contrasenia']
+
+              
+                    hashpass =bcrypt.generate_password_hash(contrasenia).decode('utf-8') 
+                    coleccionUsuarios.insert_one({'nombre':request.form['nombre'],'apellido':request.form['apellido'],'telefono':request.form['telefono'],'cedula':request.form['cedula'],'rol':request.form['menuRoles'],'permiso':permisosDocente,  'correo' : request.form['correo'], 'contrasenia' : hashpass,"estado":"activo"})
+                    session['nombre'] = request.form['nombre']
+                    session['cedula'] = request.form['cedula']
+                    session['apellido'] = request.form['apellido']
+                    session['telefono'] = request.form['telefono']
+                    session['correo'] = request.form['correo']
+                    session['rol']=request.form['menuRoles']
+                    session['permiso']=permisosDocente
+                    flash('Registro con exito')
+                    return accederRegistroUsuario()
+                        
+            
+                elif rol=="administrador":
+                    numeroUsuarios=coleccionUsuarios.count_documents({})
+                    if numeroUsuarios==0:
+                        queryPermiso={"_id":{"$in":[3,4,5,6,7,8]}}
+                    
+                        permisosAdministrador=list(coleccionPermisos.find(queryPermiso))
+                        contrasenia=request.form['contrasenia']
+
+                    
+                        hashpass =bcrypt.generate_password_hash(contrasenia).decode('utf-8') 
+
+                
+                        coleccionUsuarios.insert_one({'nombre':request.form['nombre'],'apellido':request.form['apellido'],'telefono':request.form['telefono'],'rol':request.form['menuRoles'],'permiso':permisosAdministrador,  'correo' : request.form['correo'], 'contrasenia' : hashpass, "estado":"activo"})
+                        session['nombre'] = request.form['nombre']
+                        session['apellido'] = request.form['apellido']
+                        session['telefono'] = request.form['telefono']
+                        session['correo'] = request.form['correo']
+                        session['rol']=request.form['menuRoles']
+                        session['permiso']=permisosAdministrador
+                        flash('Registro con exito')
+                        return accederRegistroUsuario()
+                    flash('Error')    
+                    return accederRegistroUsuario()
+                flash('Error')    
+                return accederRegistroUsuario()
+            else:
+                    flash('Error-datos ingresados incorrectamente')
+                    return accederRegistroUsuario()
+            
+        return accederRegistroUsuario()
+    return accederRegistroUsuario()
+
+@app.route("/validaLoginAdmin", methods=['POST', 'GET'])
+#Valida un usuario con el rol administrador
+def validaLoginAdmin():
+    """Valida Login de admin"""
+
+    
+    login_usuarioAdmin = coleccionUsuarios.find_one({'correo' : request.form['correo'],'rol':'administrador','estado':'activo'})
+    contrasenia=request.form['contrasenia']
+
+
+
+    if login_usuarioAdmin:
+            
+        if  bcrypt.check_password_hash(login_usuarioAdmin['contrasenia'],contrasenia):
+            session['correo'] = request.form['correo']
+ 
+            return accederRegistroUsuario()
+        else:
+            flash('Error al acceder')
+            return loginadmin()
+    else:
+        flash('Error al acceder')
+        return loginadmin()
+    
+
+#Registro de asignacion de materia, aula y horario a un docente
+@app.route('/registroAsignacion', methods=['POST', 'GET'])
+def registroAsignacion():
+    if request.method == 'POST':
+        existe_usuario =  coleccionUsuarios.find_one({'nombre' : request.form['menuDocentes']})
+        print(existe_usuario)
+        if existe_usuario:
+
+            actualizacion={ "$set":{'materia': request.form['menuMaterias'],'aula': request.form['menuParalelos'],'hora inicio': request.form['menuHorarioInicio'], 'hora fin': request.form['menuHorarioFin']}}
+            coleccionUsuarios.update_one(existe_usuario,actualizacion)
+            flash('Registrado')
+        else:
+            flash('Error')
+            return accederAsignacion()
+        return render_template("layouts/asignacion.html")
+#Registro de asignacion de paralelo un docente
+@app.route('/registroAsignacionestudiante', methods=['POST', 'GET'])
+def registroAsignacionEstudiante():
+    if request.method == 'POST':
+        existe_usuario =  coleccionUsuarios.find_one({'cedula' : request.form['menuCedulas']})
+        print(existe_usuario)
+        if existe_usuario:
+
+            coleccionParaleloEstudiante.insert_one({'paralelo':request.form['menuParalelos'],'cedula' : request.form['menuCedulas'],'nombre' : request.form['menuEstudiantes']})
+            print(coleccionParaleloEstudiante)
+            flash('Registrado')
+        else:
+            flash('Error')
+            return accederAsignacion()
+        return render_template("layouts/asignacionestudiante.html")
+
+        
+#Registro de estudiante
+@app.route('/registroEstudiante', methods=['POST', 'GET'])
+def registroEstudiante():
+    if request.method == 'POST':
+        existe_usuario =  coleccionUsuarios.find_one({'cedula' : request.form['cedula']})
+        edad=request.form['edad']
+        imagen=request.files['imagen']
+        filename = secure_filename(imagen.filename)
+
+        contrasenia=request.form['contrasenia']
+
+                
+        hashpass =bcrypt.generate_password_hash(contrasenia).decode('utf-8') 
+        if validarCaracteres(request.form['nombre']) and validarCaracteres(request.form['apellido']) and validarTelefono(request.form['telefono']) and validarEdad(request.form['edad']) and validarEmail(request.form['correo']) and validarContrasenia(contrasenia):
+            if existe_usuario is None:
+                imagen.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                coleccionUsuarios.insert_one({'imagen':imagen.filename,'cedula' : request.form['cedula'],'nombre':request.form['nombre'],'apellido':request.form['apellido'],'telefono':request.form['telefono'],'edad':request.form['edad'],'materia':request.form['menuMateria'],'rol':request.form['menuRoles'],'correo':request.form['correo'],'contrasenia':hashpass,'estado':"activo"})
+                flash('Registrado con exito')
+                return accederestudiante()
+            else:
+                flash('Error al registrar')
+            return accederestudiante()
+        else:
+            flash('Error- Datos incorrectos')
+            return accederestudiante()
+
+
+
+#Registro de Nota
+@app.route('/registroNota', methods=['POST', 'GET'])
+def registroNota():
+   
+    if request.method == 'POST':
+        
+        
+        
+        if validarNota(request.form['calificacion']):
+            coleccionNota.insert_one({'cedula' : request.form['menuCedula'],'calificacion':request.form['calificacion']})
+            flash('Registrado')
+            return obtenerDatos()
+        else:
+            flash('Error al registrar')
+            return accederRegistroNota()
+    
+    return render_template('layouts/registroestudiante.html')
+
+#Sirve para desactivar un usuario
+@app.route('/desactivarUsuario', methods=['POST', 'GET'])
+def desactivarUsuario():
+    if request.method == 'POST':
+        query={"rol":{"$ne":"administrador"},'correo' : request.form['correo']}
+        existe_usuario =  coleccionUsuarios.find_one(query)
+        queryUsuarioInactivo={"rol":{"$ne":"administrador"},'correo' : request.form['correo'],"estado":{"$eq":"inactivo"}}
+        usuarioInactivo=coleccionUsuarios.find_one(queryUsuarioInactivo)
+        print("eee")
+        print(existe_usuario)
+        if existe_usuario is not None and request.form['activardesactivar']=="desactivar":
+            actualizacion={"$set":{"estado":"inactivo"}}
+            coleccionUsuarios.update_one(existe_usuario, actualizacion)
+            
+            flash('Usuario Desactivado')
+        elif usuarioInactivo and  request.form['activardesactivar']=="activar":
+            actualizacion={"$set":{"estado":"activo"}}
+            coleccionUsuarios.update_one(existe_usuario, actualizacion)
+            
+            flash('Usuario Activado')
+        else:
+            flash('Error al Desactivar/Activar usuario')
+        
+
+    return render_template('layouts/desactivarusuario.html')
+
+#Función para generar el reporte de calificaciones
+@app.route('/obtenerDatos', methods=['POST', 'GET'])
+def obtenerDatos():
+    """Obtención de datos estudiante"""  
+
+    
+    datosCalificacion=coleccionNota.find()
+    coleccionUsuarios1=coleccionUsuarios.find()
+    
+    
+   
+    return render_template("layouts/registronota.html",datosCalificacion=datosCalificacion, coleccionUsuarios=coleccionUsuarios1)
+
+#Función que edita calificaciones de alumnos
+@app.route('/editarDatos', methods=['POST', 'GET'])
+def editarDatos():
+    """Obtención de datos estudiante"""  
+    if request.method=='POST':
+
+        query={'cedula' : request.form['cedula']}
+        existe_usuario =  coleccionNota.find_one(query)
+        nota=request.form['calificacion']
+        if existe_usuario and int(nota)>=0 and int(nota)<=5:
+            actualizacion={"$set":{"calificacion": request.form['calificacion']}}
+            coleccionNota.update_one(existe_usuario, actualizacion)
+           # datosCalificacion=coleccionNota.find()
+            return obtenerDatos()
+        else:
+            flash('Error')
+            return obtenerDatos()
+    
+   
+    return flash('Error')
+
+
+#Función para obtener puntaje
+@app.route('/obtenerPuntaje', methods=['POST','GET'])
+def obtenerPuntaje():
+    """Obtención de datos estudiante""" 
+    
+    if request.method=='POST':
+
+        nuevopuntaje=request.form['data']
+        print(nuevopuntaje)
+        coleccionNota.insert_one({'calificacion':nuevopuntaje})
+    
+
+        
+        #return ('',204)
+        return  url_for('',204)
+  
+puntajeh=coleccionNota.find().limit(1).sort([("_id", pymongo.DESCENDING)])
+print(puntajeh)
+@app.route("/puntaje.html")
+
+
+#retorna la página de calificación de la app
+def puntaje():
+    
+    puntaje=coleccionNota.find().limit(1).sort([("_id", pymongo.DESCENDING)])
+    return render_template("layouts/puntaje.html",puntajes=puntaje)
+
+
+
+#expresiones regulares
+def validarCedula(cedula):
+    '''
+    Funcion que valida que numero de cedula tenga 10 digitos
+    '''
+    if re.search("^(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)$", cedula):
+        return True
+    else:
+        return False
+def validarTelefono(telefono):
+    '''
+    Funcion que valida que numero de telefono tenga 10 digitos
+    '''
+    if re.search("^[0][9](\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)$", telefono):
+        return True
+    else:
+        return False
+
+def validarCaracteres(cadenaValidar):
+    '''
+    Funcion que valida que la cadena solo contenga letras
+    '''
+    if re.match("^[a-zA-Z]*$", cadenaValidar):
+        return True
+    else:
+        return False
+
+def validarEmail(emailValidar):
+    '''
+    Funcion que valida que el correo solo sea (@gmail.com) o (@espe.edu.ec)
+    '''
+    if re.match("^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$", emailValidar):
+        if re.match("^[a-zA-Z0-9.+_-]+@[gmail]+\.[com]+$", emailValidar):
+            return True
+        else:
+            if re.match("^[a-zA-Z0-9.+_-]+@[espe.edu]+\.[ec]+$", emailValidar):
+                return True
+            else:
+                return False
+    else:
+        return False
+
+def validarEdad(edad):
+    '''
+    Funcion que valida que la edad debe estar entre 3 y 5 anios
+    '''
+    if re.search("^[3-5]$", edad):
+        return True
+    else:
+        return False
+def validarContrasenia(contrasenia):
+    '''
+    Funcion que valida que la longitud de la contrasenia sea igual o mayor a 8
+    '''
+    if re.search(".{8,}", contrasenia):
+        return True
+    else:
+        return False
+
+def validarNota(nota):
+    '''
+    Funcion que valida que la nota debe estar entre 0 y 5 anios
+    '''
+    if re.search("^[0-5]$", nota):
+        return True
+    else:
+        return False
+
+
+
+>>>>>>> 95ac7381d79c7ce7c10a2e24505b7ac55b9790b8
 if __name__ == "__main__":
 
     app.run(host="0.0.0.0", port=5000, debug = True)
