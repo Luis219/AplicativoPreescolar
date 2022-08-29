@@ -1,6 +1,7 @@
 
 from ast import Return
 import os
+from pickle import TRUE
 from flask import Flask, jsonify, make_response, render_template, request, flash, url_for, redirect, session
 from werkzeug.utils import secure_filename
 from flask_restful import reqparse
@@ -191,7 +192,7 @@ def accederAsignacionEstudiante():
     usuario=coleccionUsuarios.find(query)
     paralelo=coleccionParalelo.find()
     
-    return render_template("layouts/asignacionestudiante.html", coleccionUsuarios=usuario,  coleccionCedulas=usuario, coleccionParalelos=paralelo)
+    return render_template("layouts/asignacionestudiante.html",  coleccionCedulas=usuario, coleccionParalelos=paralelo)
 
 #Permiter acceder a la página de login admin
 @app.route("/loginadmin.html")
@@ -273,8 +274,9 @@ def registroUsuario():
 
               
                     hashpass =bcrypt.generate_password_hash(contrasenia).decode('utf-8') 
-                    coleccionUsuarios.insert_one({'nombre':request.form['nombre'],'apellido':request.form['apellido'],'telefono':request.form['telefono'],'rol':request.form['menuRoles'],'permiso':permisosDocente,  'correo' : request.form['correo'], 'contrasenia' : hashpass,"estado":"activo"})
+                    coleccionUsuarios.insert_one({'nombre':request.form['nombre'],'apellido':request.form['apellido'],'telefono':request.form['telefono'],'cedula':request.form['cedula'],'rol':request.form['menuRoles'],'permiso':permisosDocente,  'correo' : request.form['correo'], 'contrasenia' : hashpass,"estado":"activo"})
                     session['nombre'] = request.form['nombre']
+                    session['cedula'] = request.form['cedula']
                     session['apellido'] = request.form['apellido']
                     session['telefono'] = request.form['telefono']
                     session['correo'] = request.form['correo']
@@ -425,6 +427,8 @@ def desactivarUsuario():
     if request.method == 'POST':
         query={"rol":{"$ne":"administrador"},'correo' : request.form['correo']}
         existe_usuario =  coleccionUsuarios.find_one(query)
+        queryUsuarioInactivo={"rol":{"$ne":"administrador"},'correo' : request.form['correo'],"estado":{"$eq":"inactivo"}}
+        usuarioInactivo=coleccionUsuarios.find_one(queryUsuarioInactivo)
         print("eee")
         print(existe_usuario)
         if existe_usuario is not None and request.form['activardesactivar']=="desactivar":
@@ -432,7 +436,7 @@ def desactivarUsuario():
             coleccionUsuarios.update_one(existe_usuario, actualizacion)
             
             flash('Usuario Desactivado')
-        elif existe_usuario and  request.form['activardesactivar']=="activar":
+        elif usuarioInactivo and  request.form['activardesactivar']=="activar":
             actualizacion={"$set":{"estado":"activo"}}
             coleccionUsuarios.update_one(existe_usuario, actualizacion)
             

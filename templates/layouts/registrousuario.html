@@ -95,18 +95,22 @@
                   <input type="text" class="form-control" id="inputName" name="nombre" placeholder="">
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="inputApelido">Apellido</label>
-                  <input type="text" class="form-control" id="inputApelido" name="apellido" placeholder="">
+                  <label for="inputApellido">Apellido</label>
+                  <input type="text" class="form-control" id="inputApellido" name="apellido" placeholder="">
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="inputApelido">Teléfono</label>
+                  <label for="inputTelefono">Teléfono</label>
                   <input type="text" class="form-control" id="inputTelefono" name="telefono" placeholder="">
                 </div>
                 <div class="form-group col-md-6">
-                <label for="inputApelido">Selecciona un rol</label>
+                  <label for="inputCedula">Cedula</label>
+                  <input type="text" class="form-control" id="inputCedula" name="cedula" placeholder="">
+                </div>
+                <div class="form-group col-md-6">
+                <label for="inputRoles">Selecciona un rol</label>
                 <select id="menuRoles" name="menuRoles" class="form-select custom-select"
                   aria-label=".form-select-sm example">
-                  <label for="inputApelido">Selecciona un rol</label>
+                  <label for="inputRol">Selecciona un rol</label>
                   <option selected>Rol</option>
                   {% for rol in coleccionRoles %}
                   <option name="rol" value="{{ rol.name }}">{{ rol.name}}</option>
@@ -134,10 +138,13 @@
                 <div class="form-group col-md-6">
                   <label for="exampleInputPassword1">Contraseña</label>
                   <input type="password" class="form-control" id="exampleInputPassword1" name="contrasenia"
-                    placeholder="Contraseña">
+                    placeholder="Ingrese 8 digitos">
                 </div>
+              </div>
 
                 <!--Botón utilizado para registrar -->
+                <br>
+                <br>
                 <br>
                 <div class="form-group col-md-6">
 
