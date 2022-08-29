@@ -32,7 +32,7 @@
           <li>
             <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Estudiantes</a>
             <ul class="collapse list-unstyled" id="homeSubmenu">
-              <form method="post" action="{{url_for('accederInicioEstudiante')}}" >
+              <form method="post" action="{{url_for('routes.accederInicioEstudiante')}}" >
                 
                 <button type="submit">
                 <select id="menuParalelo" name="menuParalelo" class="form-select custom-select" aria-label=".form-select-sm example">
@@ -94,7 +94,7 @@
      <!--Uso de cards en conjunto con nav y form para que el usuario envíe sus sugerencias-->
 
             <h1>Registro Calificacion de Estudiante</h1>
-            <form method="post" action="{{url_for('registroNota')}}" >
+            <form method="post" action="{{url_for('routes.registroNota')}}" >
 
                
               <select id="menuCedula" name="menuCedula" class="form-select custom-select" aria-label=".form-select-sm example">
@@ -116,7 +116,7 @@
                 <br>
       
               </form>
-              <form method="post" action="{{url_for('obtenerDatos')}}"><button type="submit">Ver notas</button> </form>
+              <form method="post" action="{{url_for('routes.obtenerDatos')}}"><button type="submit">Ver notas</button> </form>
 
                
     <table class="table">
