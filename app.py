@@ -66,7 +66,7 @@ app.secret_key = "luisparedez123"
 #rutas de la carpeta templates/static
 app._static_folder = os.path.abspath("templates/static")
 
-UPLOAD_FOLDER = 'templates/static/imagenes'
+UPLOAD_FOLDER = 'imagenescargadas'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -468,7 +468,8 @@ def editarDatos():
 
         query={'cedula' : request.form['cedula']}
         existe_usuario =  coleccionNota.find_one(query)
-        if existe_usuario:
+        nota=request.form['calificacion']
+        if existe_usuario and int(nota)>=0 and int(nota)<=5:
             actualizacion={"$set":{"calificacion": request.form['calificacion']}}
             coleccionNota.update_one(existe_usuario, actualizacion)
            # datosCalificacion=coleccionNota.find()
