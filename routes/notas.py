@@ -71,4 +71,25 @@ def puntaje():
     return render_template("layouts/puntaje.html",puntajes=puntaje)
 
 
+#Función que edita calificaciones de alumnos
+@app.route('/editarDatos', methods=['POST', 'GET'])
+def editarDatos():
+    """Obtención de datos estudiante"""  
+    if request.method=='POST':
+
+        query={'cedula' : request.form['cedula']}
+        existe_usuario =  app.coleccionNota.find_one(query)
+        nota=request.form['calificacion']
+        if existe_usuario and int(nota)>=0 and int(nota)<=5:
+            actualizacion={"$set":{"calificacion": request.form['calificacion']}}
+            app.coleccionNota.update_one(existe_usuario, actualizacion)
+           # datosCalificacion=coleccionNota.find()
+            return obtenerDatos()
+        else:
+            flash('Error')
+            return obtenerDatos()
+    
+   
+    return flash('Error')
+
 
