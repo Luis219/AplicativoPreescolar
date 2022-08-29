@@ -97,25 +97,14 @@
             <br>
             <form method="post" action="{{url_for('routes.registroAsignacionEstudiante')}}">
               <div class="form-row">
+        
                 <div class="form-group col-md-6">
-                  <label for="menuEstudiantes">Estudiante</label>
-                  <select id="menuEstudiantes" name="menuEstudiantes" class="form-select custom-select"
-                    aria-label=".form-select-sm example">
-                    <option selected>Opciones</option>
-                    {% for usuario in coleccionUsuarios %}
-                    <option name="usuario" value="{{ usuario.nombre}}">{{ usuario.nombre +" "+usuario.apellido}}
-                    </option>
-                    {% endfor %}
-
-                  </select>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="menuEstudiantes">Estudiante</label>
+                  <label for="menuEstudiantes">Cedulas</label>
                   <select id="menuCedulas" name="menuCedulas" class="form-select custom-select"
                     aria-label=".form-select-sm example">
                     <option selected>Opciones</option>
                     {% for usuario in coleccionCedulas %}
-                    <option name="usuario" value="{{ usuario.cedula}}">{{ usuario.cedula}}
+                    <option name="usuario" value="{{ usuario.cedula}}">{{usuario.nombre +" "+ usuario.cedula}}
                     </option>
                     {% endfor %}
 
