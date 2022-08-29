@@ -51,11 +51,11 @@ def registroAsignacion():
 @routes.route('/registroAsignacionestudiante', methods=['POST', 'GET'])
 def registroAsignacionEstudiante():
     if request.method == 'POST':
-        existe_usuario =  app.coleccionUsuarios.find_one({'cedula' : request.form['menuCedulas']})
+        existe_usuario =  app.coleccionUsuarios.find_one({'cedula' : request.form['menuEstudiantes']})
         print(existe_usuario)
         if existe_usuario:
 
-            app.coleccionParaleloEstudiante.insert_one({'paralelo':request.form['menuParalelos'],'cedula' : request.form['menuCedulas'],'nombre' : request.form['menuEstudiantes']})
+            app.coleccionParaleloEstudiante.insert_one({'paralelo':request.form['menuParalelos'],'cedula' : request.form['menuEstudiantes']})
             print(app.coleccionParaleloEstudiante)
             flash('Registrado')
         else:

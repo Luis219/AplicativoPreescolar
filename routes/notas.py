@@ -72,7 +72,7 @@ def puntaje():
 
 
 #Función que edita calificaciones de alumnos
-@app.route('/editarDatos', methods=['POST', 'GET'])
+@routes.route('/editarDatos', methods=['POST', 'GET'])
 def editarDatos():
     """Obtención de datos estudiante"""  
     if request.method=='POST':
@@ -88,7 +88,6 @@ def editarDatos():
         else:
             flash('Error')
             return obtenerDatos()
-    
    
     return flash('Error')
 
